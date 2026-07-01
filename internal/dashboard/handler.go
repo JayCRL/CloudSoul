@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/JayCRL/CloudSoul/internal/ai"
+	"github.com/JayCRL/CloudSoul/internal/api"
 	"github.com/JayCRL/CloudSoul/internal/habits"
 	"github.com/JayCRL/CloudSoul/internal/store"
 )
@@ -35,6 +36,7 @@ func init() {
 type Handler struct {
 	Store *store.Store
 	AI    *ai.Client
+	Token string
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +47,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch {
+	case path == "login":
+		h.loginPage(w, r)
 	case r.Method == "GET" && path == "overview":
 		h.overview(w, r)
 	case r.Method == "GET" && path == "workspaces":
@@ -68,6 +72,35 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.Redirect(w, r, "/dashboard/", http.StatusSeeOther)
 	}
+}
+
+// ---- login ----
+
+func (h *Handler) loginPage(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		r.ParseForm()
+		token := r.FormValue("token")
+		if token != "" && token == h.Token {
+			api.SetTokenCookie(w, token)
+			http.Redirect(w, r, "/dashboard/", http.StatusSeeOther)
+			return
+		}
+		// login 失败：直接渲染登录页并显示错误
+		loginTmpl := tmpl.Lookup("login.html")
+		if loginTmpl == nil {
+			http.Error(w, "login template not found", http.StatusInternalServerError)
+			return
+		}
+		loginTmpl.Execute(w, map[string]any{"Error": "Token 错误"})
+		return
+	}
+	// GET：显示登录页
+	loginTmpl := tmpl.Lookup("login.html")
+	if loginTmpl == nil {
+		http.Error(w, "login template not found", http.StatusInternalServerError)
+		return
+	}
+	loginTmpl.Execute(w, nil)
 }
 
 func (h *Handler) render(w http.ResponseWriter, name string, data map[string]any) {

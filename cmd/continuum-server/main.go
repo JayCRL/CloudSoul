@@ -53,9 +53,10 @@ func main() {
 	handlers := &api.Handlers{Store: st, AI: aiClient}
 	root.Handle("/api/", api.BearerAuth(cfg.BearerToken, handlers.Routes()))
 
-	// /dashboard/* —— Web 管理面板（认证）
-	dash := &dashboard.Handler{Store: st, AI: aiClient}
-	root.Handle("/dashboard/", api.BearerAuth(cfg.BearerToken, dash))
+	// /dashboard/* —— Web 管理面板
+	dash := &dashboard.Handler{Store: st, AI: aiClient, Token: cfg.BearerToken}
+	root.Handle("/dashboard/login", dash)                                          // 登录页不认证
+	root.Handle("/dashboard/", api.BearerAuth(cfg.BearerToken, dash))              // 其余需认证
 
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,
