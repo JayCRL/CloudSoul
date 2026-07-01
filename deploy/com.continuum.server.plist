@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.continuum.server</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/wust_lh/Continuum/continuum-server</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/opt/postgresql@16/bin:/opt/homebrew/bin:/usr/bin:/bin</string>
+        <key>CONTINUUM_DB_DSN</key>
+        <string>postgres://wust_lh@localhost:5432/continuum?sslmode=disable</string>
+        <key>CONTINUUM_BEARER_TOKEN</key>
+        <string>cont_dev_8f3a9e2b1d8c</string>
+        <key>CONTINUUM_LISTEN_ADDR</key>
+        <string>:8088</string>
+        <key>CONTINUUM_AI_BASE_URL</key>
+        <string>https://api.deepseek.com/v1</string>
+        <key>CONTINUUM_AI_TOKEN</key>
+        <string>REDACTED</string>
+        <key>CONTINUUM_AI_MODEL</key>
+        <string>deepseek-chat</string>
+    </dict>
+    <key>WorkingDirectory</key>
+    <string>/Users/wust_lh/Continuum</string>
+    <key>KeepAlive</key>
+    <true/>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/continuum.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/continuum.err.log</string>
+</dict>
+</plist>

@@ -1,0 +1,22 @@
+[Unit]
+Description=Continuum server (AI workspace sync layer)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/continuum/continuum.env
+ExecStart=/usr/local/bin/continuum-server
+Restart=on-failure
+RestartSec=3
+# 专用低权限用户，先 useradd --system --no-create-home continuum
+User=continuum
+Group=continuum
+# 安全加固
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

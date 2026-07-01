@@ -1,0 +1,2 @@
+{"type":"user","message":{"role":"user","content":"claude hook 测试：实现登录功能"},"sessionId":"claude-hook-1","cwd":"/Users/wust_lh/Continuum","timestamp":"2026-07-01T10:00:00.000Z"}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":"好的，先改 auth.go 加 JWT 校验"},{"type":"tool_use","id":"t1","name":"Edit","input":{}}],"model":"claude-opus-4-8"},"sessionId":"claude-hook-1","timestamp":"2026-07-01T10:00:01.000Z"}

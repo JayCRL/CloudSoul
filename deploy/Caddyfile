@@ -1,0 +1,17 @@
+# Continuum 反向代理 + 自动 HTTPS。
+#
+# 注意：Caddy 自动签发公共证书需要一个【域名】指向 8.162.0.88。
+# 纯 IP 无法签公共证书。你已有域名(如 mobilevc.top)，可加一条 A 记录
+# 例如 continuum.mobilevc.top → 8.162.0.88，然后用下面的配置。
+#
+# 若暂时只能用 IP：把下面换成 `:443 { tls internal ... }`（自签，客户端需信任），
+# 或仅 bearer over HTTP（不建议公网长期使用）。
+
+continuum.mobilevc.top {
+    reverse_proxy localhost:8088
+    encode gzip
+    # 访问日志（可选）
+    log {
+        output file /var/log/caddy/continuum.log
+    }
+}
