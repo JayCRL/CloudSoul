@@ -35,6 +35,8 @@ func (h *Handlers) Routes() *http.ServeMux {
 	mux.HandleFunc("GET /api/suggestions", h.listSuggestions)
 	mux.HandleFunc("POST /api/suggestions/{id}/accept", h.acceptSuggestion)
 	mux.HandleFunc("POST /api/suggestions/{id}/reject", h.rejectSuggestion)
+	mux.HandleFunc("GET /api/workspaces/match", h.matchWorkspace)
+	mux.HandleFunc("POST /api/workspaces/sync-git", h.syncGit)
 	return mux
 }
 
@@ -283,6 +285,54 @@ func (h *Handlers) rejectSuggestion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.Store.UpdateSuggestionStatus(r.Context(), int64(id), "rejected"); err != nil {
+		writeErr(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]bool{"ok": true})
+}
+
+// matchWorkspace 按 cwd 匹配项目，返回含 git_remote/branch 的完整信息（agent 开工拉代码用）。
+func (h *Handlers) matchWorkspace(w http.ResponseWriter, r *http.Request) {
+	cwd := r.URL.Query().Get("cwd")
+	if cwd == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "cwd required"})
+		return
+	}
+	ws, err := h.Store.MatchWorkspace(r.Context(), cwd)
+	if err != nil {
+		writeErr(w, err)
+		return
+	}
+	if ws == nil {
+		writeJSON(w, http.StatusOK, map[string]string{})
+		return
+	}
+	writeJSON(w, http.StatusOK, ws)
+}
+
+// syncGit 收工时更新 workspace 的 git_remote 和 git_branch。
+func (h *Handlers) syncGit(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		CWD       string `json:"cwd"`
+		GitRemote string `json:"git_remote"`
+		GitBranch string `json:"git_branch"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, errBody(err))
+		return
+	}
+	ws, err := h.Store.MatchWorkspace(r.Context(), req.CWD)
+	if err != nil {
+		writeErr(w, err)
+		return
+	}
+	if ws == nil {
+		writeJSON(w, http.StatusOK, map[string]string{"status": "no matching workspace"})
+		return
+	}
+	ws.GitRemote = req.GitRemote
+	ws.GitBranch = req.GitBranch
+	if _, err := h.Store.UpsertWorkspace(r.Context(), *ws); err != nil {
 		writeErr(w, err)
 		return
 	}

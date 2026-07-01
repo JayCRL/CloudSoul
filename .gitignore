@@ -16,3 +16,5 @@
 testdata/*.real.jsonl
 # 测试用上传样本
 testdata/*_test.json
+# 临时文件
+commit-msg.txt
