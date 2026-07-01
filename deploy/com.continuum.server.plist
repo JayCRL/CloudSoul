@@ -19,11 +19,11 @@
         <key>CONTINUUM_LISTEN_ADDR</key>
         <string>:8088</string>
         <key>CONTINUUM_AI_BASE_URL</key>
-        <string>https://api.deepseek.com/v1</string>
+        <string></string>
         <key>CONTINUUM_AI_TOKEN</key>
-        <string>REDACTED</string>
+        <string></string>
         <key>CONTINUUM_AI_MODEL</key>
-        <string>deepseek-chat</string>
+        <string></string>
     </dict>
     <key>WorkingDirectory</key>
     <string>/Users/wust_lh/Continuum</string>
