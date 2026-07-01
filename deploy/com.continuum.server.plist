@@ -6,7 +6,7 @@
     <string>com.continuum.server</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/wust_lh/Continuum/continuum-server</string>
+        <string>/Users/wust_lh/Continuum/deploy/run-server.sh</string>
     </array>
     <key>EnvironmentVariables</key>
     <dict>
