@@ -1,5 +1,9 @@
 # CloudSoul
 
+<p align="center">
+  <a href="https://linux.do"><img src="https://img.shields.io/badge/认可-LINUX%20DO-FFB003?style=for-the-badge" alt="认可 LINUX DO"></a>
+</p>
+
 > **你的 AI 工作区灵魂，跨机器、跨工具，如影随形。**
 
 在 A 机器用 Claude Code 干到一半，换 B 机器用 Codex 打开——CloudSoul 让你的习惯、会话记忆、工作进度自动跟上，不需要手动交代任何事。
@@ -203,6 +207,12 @@ testdata/          # 脱敏会话样本（adapter 单测用）
 | AI 压缩 | 任意 OpenAI 兼容 API（DeepSeek / OpenAI / Anthropic） |
 
 ---
+
+## 社区
+
+<p align="center">
+  <strong>讨论 & 交流：</strong><a href="https://linux.do">LINUX DO 社区</a>
+</p>
 
 ## 许可
 
