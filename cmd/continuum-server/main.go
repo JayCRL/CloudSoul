@@ -13,6 +13,7 @@ import (
 	"github.com/JayCRL/CloudSoul/internal/ai"
 	"github.com/JayCRL/CloudSoul/internal/api"
 	"github.com/JayCRL/CloudSoul/internal/config"
+	"github.com/JayCRL/CloudSoul/internal/dashboard"
 	appmcp "github.com/JayCRL/CloudSoul/internal/mcp"
 	"github.com/JayCRL/CloudSoul/internal/store"
 )
@@ -51,6 +52,10 @@ func main() {
 	// /api/* —— REST（认证）
 	handlers := &api.Handlers{Store: st, AI: aiClient}
 	root.Handle("/api/", api.BearerAuth(cfg.BearerToken, handlers.Routes()))
+
+	// /dashboard/* —— Web 管理面板（认证）
+	dash := &dashboard.Handler{Store: st, AI: aiClient}
+	root.Handle("/dashboard/", api.BearerAuth(cfg.BearerToken, dash))
 
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,

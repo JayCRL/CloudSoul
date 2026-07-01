@@ -1,0 +1,25 @@
+{{define "content"}}
+<h1 style="font-size:24px;margin-bottom:24px">工作区</h1>
+<div class="card">
+  <h2>添加 / 更新工作区</h2>
+  <form method="POST" action="/dashboard/workspaces/save">
+    <div class="grid grid-2">
+      <div class="form-group"><label>名称 *</label><input name="name" required placeholder="例: cloudsoul"></div>
+      <div class="form-group"><label>Git Remote</label><input name="git_remote" placeholder="git@github.com:user/repo.git"></div>
+      <div class="form-group"><label>Git 分支</label><input name="git_branch" placeholder="main"></div>
+      <div class="form-group"><label>Path Globs（逗号分隔）</label><input name="path_globs" placeholder="CloudSoul, continuum"></div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:8px">保存</button>
+  </form>
+</div>
+<div class="card"><h2>已登记的工作区</h2>
+  <table>
+    <tr><th>ID</th><th>名称</th><th>Git Remote</th><th>分支</th><th>Path Globs</th></tr>
+    {{range .Workspaces}}<tr>
+      <td>{{.ID}}</td><td class="code">{{.Name}}</td><td class="muted">{{if .GitRemote}}{{.GitRemote}}{{else}}—{{end}}</td>
+      <td>{{if .GitBranch}}{{.GitBranch}}{{else}}—{{end}}</td>
+      <td>{{range .PathGlobs}}<span class="tag tag-ghost">{{.}}</span> {{end}}{{if not .PathGlobs}}—{{end}}</td>
+    </tr>{{end}}
+  </table>
+</div>
+{{end}}

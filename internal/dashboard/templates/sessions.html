@@ -1,0 +1,26 @@
+{{define "content"}}
+<h1 style="font-size:24px;margin-bottom:24px">会话</h1>
+<div class="card"><h2>搜索</h2>
+  <form method="GET" action="/dashboard/sessions">
+    <div class="grid grid-3">
+      <div class="form-group"><label>关键词</label><input name="q" value="{{.Query}}" placeholder="搜 JWT / login / 任何内容"></div>
+      <div class="form-group"><label>工作区</label><input name="workspace" value="{{.Workspace}}"></div>
+      <div class="form-group"><label>工具</label><select name="tool"><option value="">全部</option><option value="claude-code" {{if eq .Tool "claude-code"}}selected{{end}}>Claude Code</option><option value="codex" {{if eq .Tool "codex"}}selected{{end}}>Codex</option></select></div>
+    </div>
+    <button class="btn btn-primary">搜索</button>
+  </form>
+</div>
+{{if .Results}}<div class="card"><h2>结果（{{len .Results}} 条）</h2>
+  {{range .Results}}<div class="card" style="margin-bottom:12px">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <span class="code">{{.SourceSessionID}}</span>
+      <span class="tag tag-ghost">{{.SourceTool}}</span>
+      <span class="tag tag-ghost">{{.Model}}</span>
+    </div>
+    {{range .Messages}}<div style="margin-bottom:6px">
+      <span class="tag {{if eq .Role "user"}}tag-accent{{else if eq .Role "assistant"}}tag-green{{else}}tag-ghost{{end}}" style="margin-right:6px">{{.Role}}</span>
+      {{range .Content}}<span class="muted">{{truncate .Text 200}}</span>{{end}}
+    </div>{{end}}
+  </div>{{end}}</div>{{end}}
+{{if not .Results}}{{if .Query}}<div class="card"><div class="empty">无匹配结果</div></div>{{else}}<div class="card"><div class="empty">输入关键词搜索历史会话</div></div>{{end}}{{end}}
+{{end}}

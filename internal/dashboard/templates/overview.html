@@ -1,0 +1,25 @@
+{{define "content"}}
+<h1 style="font-size:24px;margin-bottom:24px">概览</h1>
+<div class="grid grid-3">
+  <div class="card" style="text-align:center"><h2>工作区</h2><span style="font-size:32px;font-weight:700;color:var(--accent)">{{.WorkspaceCount}}</span></div>
+  <div class="card" style="text-align:center"><h2>会话</h2><span style="font-size:32px;font-weight:700;color:var(--accent)">{{.SessionCount}}</span></div>
+  <div class="card" style="text-align:center"><h2>待审批建议</h2><span style="font-size:32px;font-weight:700;color:var(--yellow)">{{.PendingCount}}</span></div>
+</div>
+<div class="card">
+  <h2>工作区</h2>
+  <table>
+    <tr><th>名称</th><th>Git Remote</th><th>分支</th><th>Path Globs</th></tr>
+    {{range .Workspaces}}<tr><td class="code">{{.Name}}</td><td class="muted">{{if .GitRemote}}{{.GitRemote}}{{else}}—{{end}}</td><td>{{if .GitBranch}}{{.GitBranch}}{{else}}—{{end}}</td><td class="muted">{{range .PathGlobs}}<span class="tag tag-ghost">{{.}}</span>{{end}}{{if not .PathGlobs}}—{{end}}</td></tr>{{end}}
+    {{if not .Workspaces}}<tr><td colspan="4" class="empty">暂无工作区，会话上传后自动匹配创建</td></tr>{{end}}
+  </table>
+</div>
+<div class="grid grid-2">
+  <div class="card"><h2>最近会话</h2>
+    <table>{{range .RecentSessions}}<tr><td class="code">{{.SourceSessionID}}</td><td><span class="tag tag-ghost">{{.SourceTool}}</span></td><td class="muted">{{.Model}}</td><td class="muted">{{.MessageCount}} 条消息</td></tr>{{end}}{{if not .RecentSessions}}<tr><td colspan="4" class="empty">暂无</td></tr>{{end}}</table>
+  </div>
+  <div class="card"><h2>最新 Handoff</h2>
+    {{range .LatestHandoffs}}<div style="margin-bottom:12px"><span style="font-weight:600">{{.Name}}</span><pre>{{truncate .Content 300}}</pre></div>{{end}}
+    {{if not .LatestHandoffs}}<div class="empty">暂无 handoff</div>{{end}}
+  </div>
+</div>
+{{end}}

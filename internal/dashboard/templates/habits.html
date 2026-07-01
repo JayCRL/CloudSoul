@@ -1,0 +1,26 @@
+{{define "content"}}
+<h1 style="font-size:24px;margin-bottom:24px">习惯分层</h1>
+<div class="card">
+  <h2>添加 / 更新一层习惯</h2>
+  <form method="POST" action="/dashboard/habits/save">
+    <div class="grid grid-2">
+      <div class="form-group"><label>层类型 *</label><select name="scope_type" required>
+        <option value="user">user — 用户基底</option><option value="workspace">workspace — 项目通用</option><option value="tool">tool — 工具通用</option><option value="model">model — 模型通用</option><option value="ws_tool">ws_tool — 项目×工具</option><option value="ws_model">ws_model — 项目×模型</option>
+      </select></div>
+      <div class="form-group"><label>Key（user 层留空）</label><input name="scope_key" placeholder="codex / opus / 项目名 / 项目|工具"></div>
+    </div>
+    <div class="form-group"><label>内容 *</label><textarea name="content" required placeholder="偏好简体中文、直接。&#10;Codex 用 commentary 频道报进度。"></textarea></div>
+    <button class="btn btn-primary">保存</button>
+  </form>
+</div>
+<div class="card"><h2>所有习惯层</h2>
+  <table>
+    <tr><th>层</th><th>Key</th><th>内容</th></tr>
+    {{range .Layers}}<tr>
+      <td><span class="tag tag-accent">{{.ScopeType}}</span></td>
+      <td class="code">{{if .ScopeKey}}{{.ScopeKey}}{{else}}—{{end}}</td>
+      <td style="max-width:500px"><pre style="margin:0;padding:8px">{{.Content}}</pre></td>
+    </tr>{{end}}{{if not .Layers}}<tr><td colspan="3" class="empty">暂无习惯层</td></tr>{{end}}
+  </table>
+</div>
+{{end}}

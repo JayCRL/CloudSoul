@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudSoul 管理面板</title>
+<style>
+:root{--bg:#0f1117;--card:#1a1d27;--border:#2a2d3a;--text:#e1e4ed;--muted:#8b8fa3;--accent:#6c8cff;--green:#4ade80;--red:#f87171;--yellow:#fbbf24}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+nav{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:24px;height:52px;position:sticky;top:0;z-index:10}
+nav a{color:var(--muted);text-decoration:none;font-size:14px;padding:4px 0;border-bottom:2px solid transparent}
+nav a:hover,nav a.active{color:var(--text);border-bottom-color:var(--accent)}
+nav .brand{font-weight:700;color:var(--text);font-size:16px;margin-right:auto}
+main{max-width:1200px;margin:0 auto;padding:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
+.card h2{font-size:16px;margin-bottom:12px;color:var(--text)}
+.card h3{font-size:14px;color:var(--muted);margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--muted);font-weight:500;padding:8px 12px;border-bottom:1px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500}
+.tag-accent{background:var(--accent);color:#fff}.tag-green{background:var(--green);color:#000}.tag-yellow{background:var(--yellow);color:#000}.tag-red{background:var(--red);color:#fff}
+.tag-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn{display:inline-block;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;text-decoration:none}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{opacity:.9}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-ghost:hover{background:var(--border)}
+.btn-green{background:var(--green);color:#000}.btn-red{background:var(--red);color:#fff}
+.btn-sm{padding:3px 10px;font-size:12px}
+.btn-group{display:flex;gap:6px}
+input,textarea,select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px;width:100%;font-family:inherit}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+textarea{resize:vertical;min-height:80px;font-family:monospace;font-size:12px}
+form{margin-top:12px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.grid{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}
+.muted{color:var(--muted);font-size:13px}
+.code{font-family:monospace;font-size:12px;background:var(--bg);padding:2px 6px;border-radius:4px}
+pre{background:var(--bg);border-radius:6px;padding:16px;overflow-x:auto;font-size:12px;white-space:pre-wrap;margin-top:8px}
+.empty{padding:32px;text-align:center;color:var(--muted)}
+@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr}nav{gap:12px;padding:0 12px}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">☁ CloudSoul</span>
+  <a href="/dashboard/" class="{{if eq .Active "overview"}}active{{end}}">概览</a>
+  <a href="/dashboard/workspaces" class="{{if eq .Active "workspaces"}}active{{end}}">工作区</a>
+  <a href="/dashboard/habits" class="{{if eq .Active "habits"}}active{{end}}">习惯</a>
+  <a href="/dashboard/sessions" class="{{if eq .Active "sessions"}}active{{end}}">会话</a>
+  <a href="/dashboard/suggestions" class="{{if eq .Active "suggestions"}}active{{end}}">建议</a>
+</nav>
+<main>
+{{template "content" .}}
+</main>
+</body>
+</html>

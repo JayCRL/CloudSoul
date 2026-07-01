@@ -1,0 +1,27 @@
+{{define "content"}}
+<h1 style="font-size:24px;margin-bottom:24px">AI 习惯建议</h1>
+<div class="card"><h2>触发 AI 分析</h2>
+  <form method="POST" action="/dashboard/suggestions/trigger">
+    <div class="grid grid-2">
+      <div class="form-group"><label>工作区</label><input name="workspace" placeholder="continuum"></div>
+    </div>
+    <button class="btn btn-primary">生成建议</button>
+  </form>
+</div>
+<div class="card"><h2>待审批建议</h2>
+  {{range .Suggestions}}<div class="card" style="margin-bottom:12px">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+      <span class="tag tag-accent">{{.ScopeType}}</span>
+      <span class="code">{{.ScopeKey}}</span>
+      <span class="tag {{if eq .Status "pending"}}tag-yellow{{else if eq .Status "accepted"}}tag-green{{else}}tag-red{{end}}">{{.Status}}</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">#{{.ID}}</span>
+    </div>
+    <pre style="margin-bottom:8px">{{.SuggestedContent}}</pre>
+    <div class="btn-group">
+      {{if eq .Status "pending"}}<form method="POST" action="/dashboard/suggestions/accept" style="margin:0"><input type="hidden" name="id" value="{{.ID}}"><button class="btn btn-green btn-sm">✓ 接受</button></form>
+      <form method="POST" action="/dashboard/suggestions/reject" style="margin:0"><input type="hidden" name="id" value="{{.ID}}"><button class="btn btn-red btn-sm">✗ 拒绝</button></form>{{end}}
+    </div>
+  </div>{{end}}
+  {{if not .Suggestions}}<div class="empty">暂无建议，点击上方"生成建议"让 AI 分析近期的会话</div>{{end}}
+</div>
+{{end}}
