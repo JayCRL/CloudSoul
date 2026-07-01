@@ -27,17 +27,19 @@ CloudSoul 在你自己的服务器上建了一个**云端灵魂**，记住三样
 ```
 你打开 AI 工具
     ↓ SessionStart hook 自动触发
-    ↓ cloudsoul-agent 从云端拉取：合成习惯 + 最新交接上下文
+    ↓ cloudsoul-agent 从云端查 git remote → git pull 拉最新代码
+    ↓ 拉取：合成习惯 + 最新交接上下文
     ↓ 自动注入会话（Claude Code additionalContext / Codex AGENTS.md）
-你开始干活——不知道自己被接上了
+你开始干活——代码、习惯、进度全接上了
     ↓
     ... 干活中也能调 MCP 工具：搜历史会话、存档、接受 AI 习惯建议 ...
     ↓
 你结束会话
     ↓ Stop hook 自动触发
     ↓ cloudsoul-agent 读本地会话 JSONL → 上传归档
+    ↓ 记录当前 git remote/branch/commit 到云端
     ↓ AI 自动压缩成结构化交接文档（目标/进度/下一步/坑）
-    ↓ 下次打开任意工具任意机器 → 自动接上
+    ↓ 下次打开任意工具任意机器 → 代码自动拉 + 上下文注入
 ```
 
 **不需要手敲任何命令。** Hook 全自动触发。
@@ -142,6 +144,16 @@ args = ["on-start", "--tool", "codex", "--format", "text"]
 | `ping` | 健康检查 |
 
 ---
+
+## 跨机器代码同步
+
+不需要手动 `git pull`。收工时 agent 自动把 `(remote, branch, commit)` 记到云端；开工时自动比对并拉取：
+
+- **机器 B 上已有代码** → 自动 `git fetch && git merge --ff-only` 拉到最新
+- **机器 B 上还没有代码** → 自动 `git clone` 到相同路径
+- **换了仓库** → 不自动操作（remote 不匹配时安全跳过）
+
+代码同步走的是标准 Git，不改工作区、不强制覆盖、不自动处理冲突。
 
 ## 习惯分层模型
 
